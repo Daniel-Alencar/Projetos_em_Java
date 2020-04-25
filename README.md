@@ -1,2 +1,1 @@
-# NetbeansProjects
- Projetos de Java
+# Exercícios_em_java
