@@ -9,8 +9,9 @@ import java.io.*;
 public class GameHelper {
     
     //Métodos
-    //Pegar a entrada do usuário
     public String getUserInput(String prompt){
+        //Pegar a entrada do usuário
+        
         String inputLine = null;
         System.out.print(prompt);
         try
@@ -20,9 +21,7 @@ public class GameHelper {
             if(inputLine.length() == 0){
                 return null;
             }
-        }
-        catch(IOException erro)
-        {
+        } catch(IOException erro) {
             System.out.println("IOException: " + erro);
         }
         return inputLine;

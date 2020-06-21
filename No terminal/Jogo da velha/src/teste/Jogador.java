@@ -7,12 +7,20 @@ package teste;
  */
 public class Jogador {
     //Atributos
-    private String nome;
     private char simbolo;
-    private boolean jogaAgora;
-    private int quantasVezesJogou = 0;
     
-    //Métodos
+    private String nome;
+    private boolean jogaAgora;
+    private int quantasVezesJogou;
+    
+    //Construtor
+    public Jogador(String nome) {
+        this.nome = nome;
+        this.jogaAgora = false;
+        this.quantasVezesJogou = 0;
+    }
+    
+    //Setters e getters
     public char getSimbolo() {
         return simbolo;
     }
@@ -39,5 +47,15 @@ public class Jogador {
     }
     public void setQuantasVezesJogou(int quantasVezesJogou) {
         this.quantasVezesJogou = quantasVezesJogou;
+    }
+
+    @Override
+    public String toString() {
+        return "Jogador {" + "nome = " + nome + ", simbolo = " + simbolo + ", jogaAgora = " 
+                           + jogaAgora + ", quantasVezesJogou = " + quantasVezesJogou + "}";
+    }
+    
+    public static int sortearNumeroDoJogador() {
+        return (int) (0 + Math.random() * 2);
     }
 }

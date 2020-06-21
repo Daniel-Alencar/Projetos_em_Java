@@ -5,19 +5,31 @@ package teste;
  * @author engenheiro
  */
 public class JogoDaVelha {
-    
+    //Atributos
     private static Jogador[] j = new Jogador[2];
     private static GameHelper ajuda = new GameHelper();
     private static char[] tabuleiro = new char[9];
-    private static char[] separacoes = new char[11];
-    private boolean temGanhador = false;
-    private int quantasJogadas = 0;
-    private int quantasJogadasNaPartida = 0;
-    private int[] posicoesJogadas = new int[9];
-    private Jogador ganhador = null;
-    private Jogador perdedor = null;
-    private int quantasVelhas = 0;
     
+    private boolean temGanhador;
+    private int quantasJogadas;
+    private int jogadasNaPartida;
+    private Jogador ganhador;
+    private Jogador perdedor;
+    private int quantasVelhas;
+    
+    
+    
+    //Construtor
+    public JogoDaVelha(){
+        this.temGanhador = false;
+        this.quantasJogadas = 0;
+        this.jogadasNaPartida = 0;
+        this.ganhador = null;
+        this.perdedor = null;
+        this.quantasVelhas = 0;
+    }
+    
+    //Setters e getters
     public boolean isTemGanhador() {
         return temGanhador;
     }
@@ -58,22 +70,6 @@ public class JogoDaVelha {
         JogoDaVelha.tabuleiro = tabuleiro;
     }
 
-    public static char[] getSeparacoes() {
-        return separacoes;
-    }
-
-    public static void setSeparacoes(char[] separacoes) {
-        JogoDaVelha.separacoes = separacoes;
-    }
-
-    public int[] getPosicoesJogadas() {
-        return posicoesJogadas;
-    }
-
-    public void setPosicoesJogadas(int[] posicoesJogadas) {
-        this.posicoesJogadas = posicoesJogadas;
-    }
-
     public Jogador getGanhador() {
         return ganhador;
     }
@@ -90,13 +86,6 @@ public class JogoDaVelha {
         this.perdedor = perdedor;
     }
     
-    public static void main(String[] args) {
-        JogoDaVelha j1 = new JogoDaVelha();
-        
-        j1.prepararJogo();
-        j1.startGame();
-    }
-
     public int getQuantasVelhas() {
         return quantasVelhas;
     }
@@ -105,44 +94,47 @@ public class JogoDaVelha {
         this.quantasVelhas = quantasVelhas;
     }
 
-    public int getQuantasJogadasNaPartida() {
-        return quantasJogadasNaPartida;
+    public int getJogadasNaPartida() {
+        return jogadasNaPartida;
     }
 
-    public void setQuantasJogadasNaPartida(int quantasJogadasNaPartida) {
-        this.quantasJogadasNaPartida = quantasJogadasNaPartida;
+    public void setJogadasNaPartida(int jogadasNaPartida) {
+        this.jogadasNaPartida = jogadasNaPartida;
     }
     
+    //Método main
+    public static void main(String[] args) {
+        JogoDaVelha j1 = new JogoDaVelha();
+        
+        j1.prepararJogo();
+        j1.startGame();
+    }
+    
+    //Outros métodos
     public void prepararJogo(){
         System.out.println("Preparando o jogo...");
-        this.setTemGanhador(false);
+        
         this.criarPlayers();
         this.prioridadeNoJogo();
         this.escolherSimbolo();
-        this.preencherTabuleiroESeparacoes();
-        this.zerarPosicoesJogadas();
+        this.zerarTabuleiro();
+        
         System.out.println("QUE COMECEM OS JOGOS...");
     }
     
     public void criarPlayers(){
-        System.out.println("Criando player 1 e player 2...");
-        j[0] = new Jogador();
-        j[1] = new Jogador();
+        System.out.println("Criando player 1 e player 2...\n");
         
-        j[0].setNome(ajuda.getUserInput("Nome do Player 1: "));
-        j[1].setNome(ajuda.getUserInput("Nome do Player 2: "));
+        j[0] = new Jogador(ajuda.getUserInput("Nome do Player 1: "));
+        j[1] = new Jogador(ajuda.getUserInput("Nome do Player 2: "));
+        System.out.println("");
     }
     
     public void prioridadeNoJogo(){
-        for(Jogador player: j){
-            player.setJogaAgora(false);
-        }
+        int aleatorio = Jogador.sortearNumeroDoJogador();
         
-        int jogaPrimeiro = (int) (0 + Math.random() * 2);
-        j[jogaPrimeiro].setJogaAgora(true);
-        
-        System.out.print("De acordo com a sorte... ");
-        System.out.println(j[jogaPrimeiro].getNome() + " joga primeiro.");
+        j[aleatorio].setJogaAgora(true);
+        System.out.println("De acordo com a sorte... " + j[aleatorio].getNome() + " joga primeiro.\n");
     }
     
     public void escolherSimbolo() {
@@ -152,6 +144,7 @@ public class JogoDaVelha {
             if(p.isJogaAgora()){
                 do{
                     p.setSimbolo(ajuda.getUserInput(p.getNome() + ", escolha X OU O: ").toUpperCase().charAt(0));
+                    
                     if(p.getSimbolo() == 'X' || p.getSimbolo() == 'O'){
                         
                         aux = p.getSimbolo();
@@ -159,7 +152,7 @@ public class JogoDaVelha {
                     }
                 } while(true);
                 
-                System.out.println(p.getNome() + " ficou com " + p.getSimbolo());
+                System.out.println("\n" + p.getNome() + " ficou com " + p.getSimbolo());
                 break;
             }
         }
@@ -171,24 +164,15 @@ public class JogoDaVelha {
                 } else {
                     p.setSimbolo('X');
                 }
-                System.out.println(p.getNome() + " ficou com " + p.getSimbolo());
+                System.out.println(p.getNome() + " ficou com " + p.getSimbolo() + "\n");
                 break;
             }
         }
     }
     
-    public void preencherTabuleiroESeparacoes(){
+    public void zerarTabuleiro(){
         for(int i=0; i<9; i++){
             tabuleiro[i] = ' ';
-        }
-        for(int i=0; i<11; i++){
-            separacoes[i] = '-';
-        }
-    }
-    
-    public void zerarPosicoesJogadas(){
-        for(int i=0; i<posicoesJogadas.length; i++) {
-            posicoesJogadas[i] = -1;
         }
     }
     
@@ -197,17 +181,19 @@ public class JogoDaVelha {
     }
     
     public void jogar(){
-        for(this.setQuantasJogadasNaPartida(0); !temGanhador; this.setQuantasJogadasNaPartida(this.getQuantasJogadasNaPartida() + 1)) {
+        for(jogadasNaPartida = 0; !temGanhador; ) {
             
-            Jogador jogador = vezDeJogar();
             amostrarTabuleiro();
-            
+            Jogador jogador = vezDeJogar();
             int posicaoEscolhida = escolherPosicao(jogador);
             tabuleiro[posicaoEscolhida] = jogador.getSimbolo();
-            posicoesJogadas[this.getQuantasJogadas()] = posicaoEscolhida;
             
+            //Atualizar os dados
             jogador.setQuantasVezesJogou(jogador.getQuantasVezesJogou() + 1);
-            this.setQuantasJogadas(this.getQuantasJogadas() + 1);
+            inverterVezDeJogar();
+            
+            jogadasNaPartida++;
+            quantasJogadas++;
             
             if(jogador.getQuantasVezesJogou() >= 3){
                 this.setTemGanhador(verificarSeGanhouOJogo(jogador));
@@ -218,31 +204,17 @@ public class JogoDaVelha {
                     this.setPerdedor(players[1]);
                 }
             }
-            if(this.getQuantasJogadas() == 9 && !temGanhador){
+            if(jogadasNaPartida == 9 && !temGanhador){
                 this.darVelha();
             }
-            inverterVezDeJogar();
         }
         finalizarJogo();
     }
     
-    public void darVelha() {
-        this.setQuantasVelhas(this.getQuantasVelhas() + 1);
-        
-        System.out.println("\n======================================================");
-        System.out.println("DEU VELHA. VAMOS MAIS UMA VEZ: ");
-        this.setTemGanhador(false);
-        this.setQuantasJogadasNaPartida(0);
-        
-        this.preencherTabuleiroESeparacoes();
-        this.zerarPosicoesJogadas();
-        System.out.println("======================================================\n");
-    }
-    
     public Jogador vezDeJogar() {
-        for(Jogador p: j) {
-            if(p.isJogaAgora()){
-                return p;
+        for(Jogador player: j) {
+            if(player.isJogaAgora()){
+                return player;
             }
         }
         return null;
@@ -258,7 +230,7 @@ public class JogoDaVelha {
             }
         }
         for(int i=0; i<11; i++){
-            System.out.print(separacoes[i]);
+            System.out.print('-');
         }
         System.out.println("");
         for(int i=3; i<6; i++){
@@ -269,7 +241,7 @@ public class JogoDaVelha {
             }
         }
         for(int i=0; i<11; i++){
-            System.out.print(separacoes[i]);
+            System.out.print('-');
         }
         System.out.println("");
         for(int i=6; i<9; i++){
@@ -282,26 +254,31 @@ public class JogoDaVelha {
     }
     
     public int escolherPosicao(Jogador jogador) {
-        boolean podeSair;
         int posicaoEscolhida;
+        boolean podeSair;
         do{
-            podeSair = true;
-            posicaoEscolhida = Integer.parseInt(ajuda.getUserInput(jogador.getNome() + ", escolha uma posição [0, 1, 2, 3, 4, 5, 6, 7 ou 8]: "));
-
-            for(int posicao: posicoesJogadas){
-                if(posicaoEscolhida == posicao){
-                    podeSair = false;
-                    break;
+            podeSair = false;
+            posicaoEscolhida = Integer.parseInt(ajuda.getUserInput("\n" + jogador.getNome() + ", escolha uma posição [0, 1, 2, 3, 4, 5, 6, 7 ou 8]: "));
+            
+            if(posicaoEscolhida >= 0 && posicaoEscolhida <= 8){
+                if(tabuleiro[posicaoEscolhida] != 'X' && tabuleiro[posicaoEscolhida] != 'O') {
+                    podeSair = true;
                 }
             }
-            if(podeSair == true){
-                if(posicaoEscolhida < 0 || posicaoEscolhida > 8) {
-                    podeSair = false;
-                }
-            }
+            
         }
         while(!podeSair);
         return posicaoEscolhida;
+    }
+    
+    public void inverterVezDeJogar(){
+        for(Jogador p: j) {
+            if(p.isJogaAgora()){
+                p.setJogaAgora(false);
+            } else {
+                p.setJogaAgora(true);
+            }
+        }
     }
     
     public boolean verificarSeGanhouOJogo(Jogador jogador) {
@@ -393,15 +370,26 @@ public class JogoDaVelha {
         return null;
     }
     
+    public void darVelha() {
+        
+        System.out.println("\n=========================================================================");
+        this.amostrarTabuleiro();
+        System.out.println("\nVELHA...Vamos tentar de novo...");
+        System.out.println("=========================================================================\n");
+        
+        this.setJogadasNaPartida(0);
+        this.zerarTabuleiro();
+        this.setQuantasVelhas(this.getQuantasVelhas() + 1);
+    }
+    
     public void finalizarJogo(){
-        System.out.println("\n======================================================\n");
+        System.out.println("\n=========================================================================\n");
         amostrarTabuleiro();
         
         System.out.println("\nACABOU O JOGO... INFORMAÇÕES DESSA PARTIDA: ");
         System.out.println("Jogadores: " + j[0].getNome() + " e " + j[1].getNome() + ".");
         System.out.println("Total de velhas dadas: " + this.getQuantasVelhas() + ".");
-        System.out.println("Total de jogadas: " + quantasJogadas + ".");
-        System.out.println("Total de jogadas ne última partida: " + this.getQuantasJogadasNaPartida() + ".\n");
+        System.out.println("Total de jogadas: " + quantasJogadas + ".\n");
         
         System.out.println(ganhador.getNome() + " VENCEUUUUUU.");
         System.out.println("Jogou um total de " + ganhador.getQuantasVezesJogou() + " vezes.");
@@ -411,26 +399,6 @@ public class JogoDaVelha {
         System.out.println("Jogou um total de " + perdedor.getQuantasVezesJogou() + " vezes.");
         System.out.println("Símbolo " + perdedor.getSimbolo() + ".\n");
         
-        System.out.println("======================================================");
-    }
-    
-    public void inverterVezDeJogar(){
-        for(Jogador p: j) {
-            if(p.isJogaAgora()){
-                p.setJogaAgora(false);
-            } else {
-                p.setJogaAgora(true);
-            }
-        }
-    }
-    
-    public void amostrarPosicoesEscolhidas(){
-        System.out.print("Posições escolhidas = ");
-        for(int posicao: posicoesJogadas){
-            if(posicao != -1){
-                System.out.print(posicao + "...");
-            }
-        }
-        System.out.println("");
+        System.out.println("=========================================================================");
     }
 }
