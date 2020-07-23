@@ -1,2 +1,2 @@
-# Projetos_em_Java
+# Projetos em Java
 Projetos simples de Java feitos no netbeans
