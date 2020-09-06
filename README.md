@@ -1,2 +1,2 @@
 # Projetos em Java
-Projetos simples de Java
+Projetos simples feitos em Java
